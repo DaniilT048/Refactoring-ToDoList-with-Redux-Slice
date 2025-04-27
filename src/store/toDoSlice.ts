@@ -1,5 +1,4 @@
-import {createSlice, Slice} from '@reduxjs/toolkit';
-import {useState} from "react";
+import {createSlice, PayloadAction, Slice} from '@reduxjs/toolkit';
 
 interface Task{
     text: string;
@@ -13,3 +12,13 @@ interface ToDoState{
 const initialState: ToDoState = {
     tasks: [],
 }
+
+const toDoSlice: Slice<ToDoState> = createSlice({
+    name: 'toDo',
+    initialState,
+    reducers:{
+        addTask(state, action: PayloadAction<string>){
+            state.tasks.push({text: action.payload, done: false})
+        }
+    }
+})
