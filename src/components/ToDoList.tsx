@@ -1,7 +1,7 @@
 import './ToDoList.css';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store.ts";
-import {addTask} from "../store/toDoSlice.ts";
+import {addTask, doneTask} from "../store/toDoSlice.ts";
 import {ChangeEvent, useState} from "react";
 
 
@@ -10,11 +10,11 @@ function ToDoList(){
     const tasks = useSelector((state: RootState) => state.todo.tasks);
     const dispatch = useDispatch<AppDispatch>();
 
-    function handleNewTask(event: ChangeEvent<HTMLInputElement>): void {
+    const handleNewTask =(event: ChangeEvent<HTMLInputElement>): void => {
         setNewTask(event.target.value);
     }
 
-    function handleAddTask(): void {
+    const handleAddTask = (): void => {
         if (newTask.trim() === '') {
             return;
         }
@@ -22,7 +22,12 @@ function ToDoList(){
         setNewTask('');
     }
 
+    const handleDoneTask = (index: number):void =>{
+        dispatch(doneTask(index))
+    }
 
+
+    // @ts-ignore
     return (
             <div>
                 <h1>To do list</h1>
@@ -39,7 +44,7 @@ function ToDoList(){
                     <li key={index}>
                         <span className={element.done ? 'done' : ''}
                               style={{ textDecoration: element.done ? 'line-through' : 'none' }}>{element.text}</span>
-                        <button className={'doneButton'}>done</button>
+                        <button className={'doneButton'} onClick={() => handleDoneTask(index)}>done</button>
                         <button className={'deleteButton'}>delete</button>
                     </li>
                 ))}
