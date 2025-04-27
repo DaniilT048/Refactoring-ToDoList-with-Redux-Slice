@@ -1,34 +1,25 @@
-import { useState } from 'react';
 import './ToDoList.css';
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store/store.ts";
+import {addTask} from "../store/toDoSlice.ts";
+import {ChangeEvent, useState} from "react";
 
 
 function ToDoList(){
-    const [tasks, setTasks] = useState<{ text: string; done: boolean }[]>([]);
-    const [newTask, setNewTask] = useState('')
+    const [newTask, setNewTask] = useState('');
+    const tasks = useSelector((state: RootState) => state.todo.tasks);
+    const dispatch = useDispatch<AppDispatch>();
 
-    function handleNewTask(event: any):void {
-        setNewTask(event.target.value)
+    function handleNewTask(event: ChangeEvent<HTMLInputElement>): void {
+        setNewTask(event.target.value);
     }
 
-
-    
-    function addTask():void {
-        if (newTask === '') {
-            return
+    function handleAddTask(): void {
+        if (newTask.trim() === '') {
+            return;
         }
-        setTasks([...tasks, {text: newTask, done: false}])
-    }
-
-    function doneTask(index:number):void {
-        setTasks((prevTasks):{text: string, done: boolean}[]=>
-            prevTasks.map((todo, i)=> i === index?{...todo, done: !todo.done}:todo))
-    }
-
-    
-
-    function deleteTask(index: number):void {
-        const updateTasks = tasks.filter((_,  i:number):boolean => i !== index)
-        setTasks(updateTasks);
+        dispatch(addTask(newTask));
+        setNewTask('');
     }
 
 
@@ -39,18 +30,17 @@ function ToDoList(){
                     <input
                     type="text"
                     placeholder="Add task.."
-                    value={newTask}
                     onChange={handleNewTask}
                     />
-                <button className={'addButton'} onClick={addTask} >add</button>
+                <button className={'addButton'} onClick={handleAddTask} >add</button>
             </div>
             <ol>
                 {tasks.map((element, index) => (
                     <li key={index}>
                         <span className={element.done ? 'done' : ''}
                               style={{ textDecoration: element.done ? 'line-through' : 'none' }}>{element.text}</span>
-                        <button className={'doneButton'} onClick={() => doneTask(index)}>done</button>
-                        <button className={'deleteButton'} onClick={() => deleteTask(index)}>delete</button>
+                        <button className={'doneButton'}>done</button>
+                        <button className={'deleteButton'}>delete</button>
                     </li>
                 ))}
             </ol>

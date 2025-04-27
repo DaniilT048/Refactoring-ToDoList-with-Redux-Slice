@@ -19,6 +19,17 @@ const toDoSlice: Slice<ToDoState> = createSlice({
     reducers:{
         addTask(state, action: PayloadAction<string>){
             state.tasks.push({text: action.payload, done: false})
-        }
+        },
+        doneTask(state, action: PayloadAction<number>){
+            const index: number = action.payload;
+            if(state.tasks[index]){
+                state.tasks[index].done = !state.tasks[index].done
+            }
+        },
+
     }
-})
+});
+
+export const { addTask, doneTask } = toDoSlice.actions;
+
+export default toDoSlice.reducer;
