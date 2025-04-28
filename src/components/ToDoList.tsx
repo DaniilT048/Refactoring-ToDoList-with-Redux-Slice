@@ -1,7 +1,7 @@
 import './ToDoList.css';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/store.ts";
-import {addTask, doneTask} from "../store/toDoSlice.ts";
+import {addTask, deleteTask, doneTask} from "../store/toDoSlice.ts";
 import {ChangeEvent, useState} from "react";
 
 
@@ -26,8 +26,12 @@ function ToDoList(){
         dispatch(doneTask(index))
     }
 
+    const handleDeleteTask = (index: number):void =>{
+        dispatch(deleteTask(index))
+    }
 
-    // @ts-ignore
+
+
     return (
             <div>
                 <h1>To do list</h1>
@@ -45,7 +49,7 @@ function ToDoList(){
                         <span className={element.done ? 'done' : ''}
                               style={{ textDecoration: element.done ? 'line-through' : 'none' }}>{element.text}</span>
                         <button className={'doneButton'} onClick={() => handleDoneTask(index)}>done</button>
-                        <button className={'deleteButton'}>delete</button>
+                        <button className={'deleteButton'} onClick={() => handleDeleteTask(index)}>delete</button>
                     </li>
                 ))}
             </ol>

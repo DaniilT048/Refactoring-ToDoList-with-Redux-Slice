@@ -26,10 +26,13 @@ const toDoSlice: Slice<ToDoState> = createSlice({
                 state.tasks[index].done = !state.tasks[index].done
             }
         },
+        deleteTask(state, action: PayloadAction<number>){
+            state.tasks.splice(action.payload, 1)
+        }
 
     }
 });
 
-export const { addTask, doneTask } = toDoSlice.actions;
+export const { addTask, doneTask, deleteTask } = toDoSlice.actions;
 
 export default toDoSlice.reducer;
